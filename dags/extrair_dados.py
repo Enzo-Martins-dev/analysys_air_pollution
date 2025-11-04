@@ -5,7 +5,7 @@ import os
 from dotenv import load_dotenv
 import json
 import pandas as pd 
-from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.providers.postgres.hooks.postgres import PostgresHook # type: ignore
 import logging 
 
 logging.basicConfig(level=logging.INFO)
