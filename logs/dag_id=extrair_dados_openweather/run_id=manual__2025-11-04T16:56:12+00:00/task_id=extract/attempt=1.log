@@ -1,0 +1,6 @@
+{"timestamp":"2025-11-04T16:56:16.469522Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2025-11-04T16:56:16.470014Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/extrair_dados.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2025-11-04T16:56:17.678422Z","level":"info","event":"Running statement: SELECT MAX(data_hora_utc) FROM qualidade_ar_historico;, parameters: None","logger":"airflow.task.hooks.airflow.providers.postgres.hooks.postgres.PostgresHook","filename":"sql.py","lineno":810}
+{"timestamp":"2025-11-04T16:56:17.679927Z","level":"info","event":"Rows affected: 1","logger":"airflow.task.hooks.airflow.providers.postgres.hooks.postgres.PostgresHook","filename":"sql.py","lineno":822}
+{"timestamp":"2025-11-04T16:57:10.644325Z","level":"error","event":"Server indicated the task shouldn't be running anymore. Terminating process","detail":{"detail":{"reason":"not_running","message":"TI is no longer in the running state and task should terminate","current_state":"failed"}},"logger":"task"}
+{"timestamp":"2025-11-04T16:57:15.670605Z","level":"error","event":"Task killed!","logger":"task"}

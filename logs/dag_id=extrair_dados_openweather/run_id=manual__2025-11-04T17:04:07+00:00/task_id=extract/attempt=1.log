@@ -1,0 +1,9 @@
+{"timestamp":"2025-11-04T17:04:08.708258Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2025-11-04T17:04:08.709033Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/extrair_dados.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2025-11-04T17:04:09.039385Z","level":"info","event":"Iniciando tarefa de extração de dados da API OpenWeather.","logger":"root","filename":"extrair_dados.py","lineno":45}
+{"timestamp":"2025-11-04T17:04:09.039619Z","level":"info","event":"Consultando a data máxima existente na tabela de destino.","logger":"root","filename":"extrair_dados.py","lineno":52}
+{"timestamp":"2025-11-04T17:04:09.053507Z","level":"info","event":"Running statement: SELECT MAX(data_hora_utc) FROM qualidade_ar_historico;, parameters: None","logger":"airflow.task.hooks.airflow.providers.postgres.hooks.postgres.PostgresHook","filename":"sql.py","lineno":810}
+{"timestamp":"2025-11-04T17:04:09.055005Z","level":"info","event":"Rows affected: 1","logger":"airflow.task.hooks.airflow.providers.postgres.hooks.postgres.PostgresHook","filename":"sql.py","lineno":822}
+{"timestamp":"2025-11-04T17:04:09.055373Z","level":"info","event":"Data máxima encontrada: 2020-01-01 00:00:00","logger":"root","filename":"extrair_dados.py","lineno":61}
+{"timestamp":"2025-11-04T17:04:56.524154Z","level":"error","event":"Server indicated the task shouldn't be running anymore. Terminating process","detail":{"detail":{"reason":"not_running","message":"TI is no longer in the running state and task should terminate","current_state":"failed"}},"logger":"task"}
+{"timestamp":"2025-11-04T17:05:01.547958Z","level":"error","event":"Task killed!","logger":"task"}
