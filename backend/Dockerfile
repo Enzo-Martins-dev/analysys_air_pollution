@@ -31,5 +31,3 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 # Copia o código da sua aplicação
 COPY backend/app.py .
-
-# O comando de execução (uvicorn) será definido no docker-compose.yml

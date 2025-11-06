@@ -15,11 +15,14 @@ logger = logging.getLogger(__name__)
 
 load_dotenv()
 
-DB_HOST = os.getenv("POSTGRES_HOST", "postgres") #postgres no docker wsl
+DB_HOST = os.getenv("POSTGRES_HOST", "postgres") 
 DB_NAME = os.getenv("POSTGRES_DB", "airflow")
 DB_USER = os.getenv("POSTGRES_USER", "airflow")
 DB_PASS = os.getenv("POSTGRES_PASSWORD", "airflow")
-DB_PORT = os.getenv("POSTGRES_PORT", "5432") #5432 no docker wsl
+DB_PORT = os.getenv("POSTGRES_PORT", "5432") 
+
+DB_HOST = 'localhost'  
+DB_PORT = '5433'     
 
 app = FastAPI(title="API de Otimização da Qualidade do Ar")
 
