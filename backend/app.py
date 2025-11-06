@@ -42,6 +42,7 @@ class OtimizacaoRequest(BaseModel):
     poluente_coluna: str
 
 def get_db_conn():
+    DB_PORT = '5433'
     try:
         print('Host:', DB_HOST)
         print('Database:', DB_NAME)
