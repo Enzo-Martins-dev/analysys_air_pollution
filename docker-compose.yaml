@@ -79,6 +79,7 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
+    - ${AIRFLOW_PROJ_DIR:-.}/sql:/opt/airflow/sql
     - ./dados_persistentes:/opt/airflow/dados:rw
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
@@ -339,6 +340,29 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+
+  app-backend:
+    build: 
+      context: .
+      dockerfile: backend/Dockerfile
+    volumes:
+      - ./backend:/app
+    command: ["uv", "run", "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    ports:
+      - "8000:8000"
+    env_file:
+      - ${ENV_FILE_PATH:-.env}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  app-frontend:
+    image: nginx:stable-alpine
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro 
+    ports:
+      - "80:80" 
+    restart: always
 
 volumes:
   postgres-db-volume:

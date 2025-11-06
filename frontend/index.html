@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otimizador de Qualidade do Ar (Protótipo Simples)</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        select, button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ddd; }
+        button { background-color: #20b2aa; color: white; cursor: pointer; margin-top: 20px; }
+        button:hover { background-color: #1a8b84; }
+        #resultado { margin-top: 30px; padding: 15px; border: 2px dashed #28a745; border-radius: 4px; display: none; }
+        .titulo { font-size: 1.5em; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .otimo { color: #28a745; font-weight: bold; font-size: 1.2em; }
+        .opcional { font-weight: normal; color: #666; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+    <div class="titulo">🔬 Otimizador de Exposição à Poluição</div>
+
+    <form id="otimizacaoForm">
+        <label for="cidade">Selecione a Cidade/Localidade: <span class="opcional">(Opcional para cálculo global)</span></label>
+        <select id="cidade" name="cidade">
+            <option value="">Cálculo Global (Média de Todos os Locais)</option>
+            <option value="New York">New York</option>
+            <option value="Chicago">Chicago (Exemplo)</option>
+        </select>
+
+        <label for="poluente">Poluente para Minimizar: <span class="opcional">(Obrigatório)</span></label>
+        <select id="poluente" name="poluente" required>
+            <option value="" disabled selected>Escolha um poluente...</option>
+            <option value="pm2_5_particulado">Particulado (PM2.5)</option>
+            <option value="no2_dioxido_nitrogenio">Dióxido de Nitrogênio (NO2)</option>
+            <option value="co_monoxido_carbono">Monóxido de Carbono (CO)</option>
+            <option value="o3_ozonio">Ozônio (O3)</option>
+        </select>
+
+        <button type="submit">Calcular Horário Ótimo</button>
+    </form>
+
+    <div id="resultado">
+        <h3>✨ Recomendação de Atividade</h3>
+        <p>Baseado na minimização do poluente <span id="resPoluente"></span> em <span id="resCidade"></span>:</p>
+        <p class="otimo">Melhor Horário: <span id="resHorario">--</span></p>
+        <p>Nível Esperado (Valor de $f$): <span id="resNivel">--</span></p>
+    </div>
+
+    <script>
+        document.getElementById('otimizacaoForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            
+            const cidade = document.getElementById('cidade').value || 'Global'; // Se vazio, usa 'Global' para exibição
+            const poluente = document.getElementById('poluente').value;
+            const nomePoluente = document.getElementById('poluente').options[document.getElementById('poluente').selectedIndex].text;
+
+            // Validação simples
+            if (!poluente) {
+                alert('Por favor, selecione um poluente.');
+                return;
+            }
+
+            document.getElementById('resPoluente').textContent = nomePoluente;
+            document.getElementById('resCidade').textContent = (document.getElementById('cidade').value === '' ? 'Média Global' : cidade);
+            document.getElementById('resHorario').textContent = 'Calculando...';
+            document.getElementById('resNivel').textContent = '...';
+            document.getElementById('resultado').style.display = 'block';
+
+            const apiUrl = 'http://localhost:8000/api/otimizar'; 
+
+            const dataToSend = {
+                // Se a cidade for vazia, enviamos '' para o Python saber que é o cálculo global.
+                cidade: document.getElementById('cidade').value, 
+                poluente_coluna: poluente 
+            };
+
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dataToSend)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro na comunicação com a API Python. Status: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Recebe os resultados do cálculo (SymPy no Python)
+                const horario = Math.floor(data.horario_otimo).toString().padStart(2, '0') + 
+                                ':' + 
+                                Math.round((data.horario_otimo % 1) * 60).toString().padStart(2, '0');
+
+                document.getElementById('resHorario').textContent = horario;
+                document.getElementById('resNivel').textContent = `${data.nivel_minimo.toFixed(2)} ${data.unidade || 'g/m³'}`;
+            })
+            .catch(error => {
+                console.error('Erro de Fetch:', error);
+                document.getElementById('resHorario').textContent = 'Erro ao calcular.';
+                document.getElementById('resNivel').textContent = `Verifique o servidor Python e a porta ${apiUrl}`;
+            });
+        });
+    </script>
+
+</body>
+</html>

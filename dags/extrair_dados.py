@@ -12,14 +12,14 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 DIRETORIO_DADOS = "/opt/airflow/dados_persistentes/Dados"
-DIRETORIO_SQL = "/opt/airflow/dags/sql" 
+DIRETORIO_SQL = "/opt/airflow/sql" 
 
 POSTGRES_CONN_ID = 'postgres_conn'
 NOME_TABELA_DB = "qualidade_ar_historico"
 NOME_ARQUIVO_SQL = "create_table_air_pollution.sql"
 
 DATA_INICIAL_FALLBACK = datetime(2020, 11, 27, tzinfo=timezone.utc)
-MAXIMO_DIAS_POR_REQUISICAO = 365 # 
+MAXIMO_DIAS_POR_REQUISICAO = 365  
 
 load_dotenv()
 OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY')
@@ -36,7 +36,7 @@ default_args = {
 @dag(
     dag_id='extrair_dados_openweather',
     default_args=default_args,
-    schedule=None,
+    schedule='30 14 * * *',
     start_date=datetime(2025, 11, 3),
     catchup=False,
     tags=['extracao', 'etl']
@@ -165,13 +165,14 @@ def extrair_dados_pipeline():
         }, inplace=True)
         
         df['data_hora_utc'] = pd.to_datetime(df['data_hora_utc'], unit='s', utc=True)
+        df['hora_int'] = df['data_hora_utc'].dt.hour
         df['latitude'] = data['latitude']
         df['longitude'] = data['longitude']
         df['cidade'] = data['cidade']
         df['indice_qualidade_ar'] = df['indice_qualidade_ar'].round().astype('Int64')
 
         colunas_ordenadas = [
-            'data_hora_utc', 'latitude', 'longitude', 'cidade', 
+            'data_hora_utc', 'hora_int', 'latitude', 'longitude', 'cidade', 
             'indice_qualidade_ar', 'co_monoxido_carbono', 'no_monoxido_nitrogenio', 
             'no2_dioxido_nitrogenio', 'o3_ozonio', 'so2_dioxido_enxofre', 
             'pm2_5_particulado', 'pm10_particulado', 'nh3_amonia'

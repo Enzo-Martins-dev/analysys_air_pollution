@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS qualidade_ar_historico (
     data_hora_utc TIMESTAMP WITH TIME ZONE NOT NULL,
+    hora_int INTEGER,
     latitude DECIMAL(9, 6) NOT NULL,
     longitude DECIMAL(9, 6) NOT NULL,
     cidade VARCHAR(100), 

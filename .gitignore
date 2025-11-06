@@ -1,11 +1,28 @@
-# Python-generated files
 __pycache__/
-*.py[oc]
+*.py[co]
+*.pyd
+*.so
 build/
 dist/
 wheels/
 *.egg-info
 
-# Virtual environments
 .venv
 .env
+venv
+
+logs/
+.gitkeep
+
+data/
+dags/data/
+volumes/
+
+.airflow/
+
+.dockerignore
+.docker/
+.docker-build-cache/
+
+airflow.cfg
+webserver_config.py
