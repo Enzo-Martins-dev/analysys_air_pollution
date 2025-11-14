@@ -89,7 +89,6 @@ def calcular_otimizacao(df_agregado: pd.DataFrame, grau_polinomial=4):
     for i in range(1, grau_polinomial + 1):
         f_t += coefs[i] * t**i
 
-    # 4. Critério da Primeira Derivada (Pontos Críticos)
     f_prime = diff(f_t, t)
     
     pontos_criticos = solve(f_prime, t)
@@ -105,8 +104,6 @@ def calcular_otimizacao(df_agregado: pd.DataFrame, grau_polinomial=4):
 
     logger.info(f"Pontos críticos (reais e no domínio [0, 23]): {pontos_reais}")
 
-    # 5. Classificação (Critério da Segunda Derivada e Extremos)
-    # Calcula a Segunda Derivada
     f_double_prime = diff(f_prime, t)
     
     candidatos = list(set(pontos_reais + [0.0, 23.0]))
@@ -115,8 +112,7 @@ def calcular_otimizacao(df_agregado: pd.DataFrame, grau_polinomial=4):
     
     for tc in candidatos:
         valor_f = float(N(f_t.subs(t, tc))) 
-        # Avalia o valor da segunda derivada para classificação (opcional, mas bom para relatório)
-        # Classificacao: > 0 (Mínimo local), < 0 (Máximo local), = 0 (Sela/Inflexão)
+
         valor_fpp = float(N(f_double_prime.subs(t, tc)))
         
         resultados_f.append({

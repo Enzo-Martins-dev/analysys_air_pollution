@@ -55,7 +55,6 @@
             const poluente = document.getElementById('poluente').value;
             const nomePoluente = document.getElementById('poluente').options[document.getElementById('poluente').selectedIndex].text;
 
-            // Validação simples
             if (!poluente) {
                 alert('Por favor, selecione um poluente.');
                 return;
@@ -70,7 +69,6 @@
             const apiUrl = 'http://localhost:8000/api/otimizar'; 
 
             const dataToSend = {
-                // Se a cidade for vazia, enviamos '' para o Python saber que é o cálculo global.
                 cidade: document.getElementById('cidade').value, 
                 poluente_coluna: poluente 
             };
@@ -89,7 +87,6 @@
                 return response.json();
             })
             .then(data => {
-                // Recebe os resultados do cálculo (SymPy no Python)
                 const horario = Math.floor(data.horario_otimo).toString().padStart(2, '0') + 
                                 ':' + 
                                 Math.round((data.horario_otimo % 1) * 60).toString().padStart(2, '0');
